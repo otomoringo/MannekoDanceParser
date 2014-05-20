@@ -25,8 +25,6 @@ public class Parser {
 
 		for (int i = 0; i < line.length(); i++) {
 			char ch = line.charAt(i);
-			if (loopCounter == 0 && stack.empty())
-				break;
 			switch (ch) {
 			case '(':
 				stack.push(ch);
@@ -34,18 +32,24 @@ public class Parser {
 				break;
 
 			case ')':
-				i -= count + 1;
-				loopCounter--;
-				count = 0;
+				if (loopCounter > 1) {
+					i -= count + 1;
+					loopCounter--;
+					count = 0;
+				}
+
+				if (loopCounter <= 0)
+					stack.pop();
 				break;
 
 			default:
-				if (!stack.empty() && stack.peek() == '(') {
+				if (i != 0 && line.charAt(i - 1) == '(') {
 					loopCounter = Integer.parseInt("" + ch);
-					stack.pop();
 				} else {
-					result += ch;
-					count++;
+					if (loopCounter > 0 || stack.empty()) {
+						result += ch;
+						count++;
+					}
 				}
 				break;
 			}
@@ -74,9 +78,9 @@ public class Parser {
 				break;
 
 			default:
-				if (getBranch() == 1 && stack.peek() == '[') {
+				if (getBranch() == 0 && stack.peek() == '[') {
 					result += ch;
-				} else if (getBranch() == 0 && stack.peek() == '|') {
+				} else if (!(getBranch() == 0) && stack.peek() == '|') {
 					result += ch;
 				}
 				break;
