@@ -2,20 +2,22 @@ import java.util.Scanner;
 import java.util.Stack;
 
 public class Parser {
+	private int _branch;
+
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
+		Parser parser = new Parser();
 		while (true) {
 			String line = sc.nextLine();
 			if (line.equals("0"))
 				break;
-			String result = parse(line);
-			// String result = ifParse(line);
+			String result = parser.parse(line);
 			System.out.println(result);
 		}
 		sc.close();
 	}
 
-	public static String parse(String line) {
+	public String parse(String line) {
 		String result = "";
 		Stack<Character> stack = new Stack<Character>();
 		int count = 0;
@@ -51,10 +53,9 @@ public class Parser {
 		return result;
 	}
 
-	public static String ifParse(String line) {
+	public String parseIf(String line) {
 		String result = "";
 		Stack<Character> stack = new Stack<Character>();
-		int random = 0;
 
 		for (int i = 0; i < line.length(); i++) {
 			char ch = line.charAt(i);
@@ -73,9 +74,9 @@ public class Parser {
 				break;
 
 			default:
-				if (random == 1 && stack.peek() == '[') {
+				if (getBranch() == 1 && stack.peek() == '[') {
 					result += ch;
-				} else if (random == 0 && stack.peek() == '|') {
+				} else if (getBranch() == 0 && stack.peek() == '|') {
 					result += ch;
 				}
 				break;
@@ -83,16 +84,13 @@ public class Parser {
 		}
 		return result;
 	}
-	// case '[':
-	// stack.push(ch);
-	// // stack.empty();
-	// // stack.pop();
-	// break;
-	//
-	// if (stack.peek() == '[')
-	// boolean frag = true;
-	//
-	// if(stack.peek()=='|')
-	// frag == false;
+
+	public int getBranch() {
+		return _branch;
+	}
+
+	public void setBranch(int branch) {
+		_branch = branch;
+	}
 
 }
