@@ -1,3 +1,5 @@
+package com.otomoringo.manekkodanceparser;
+
 import java.util.Scanner;
 import java.util.Stack;
 
@@ -11,6 +13,13 @@ public class Parser {
 			String line = sc.nextLine();
 			if (line.equals("0"))
 				break;
+
+			Stack<Util> stack = new Stack<Util>();
+			Util namae = new Util('(', 3, 2);
+			stack.push(namae);
+			Util name = stack.peek();// 積んだてっぺんのクラスをとりあえずとりだす
+			char c = name.bracket;// stack.peek().bracketでもよい
+
 			String result = parser.parse(line);
 			System.out.println(result);
 		}

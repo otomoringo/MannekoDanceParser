@@ -3,6 +3,8 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.otomoringo.manekkodanceparser.Parser;
+
 public class ParserTest {
 
 	private Parser _parser;
