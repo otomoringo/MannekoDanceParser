@@ -38,13 +38,21 @@ public class Parser {
 					count = 0;
 				}
 
-				if (loopCounter <= 0)
+				if (loopCounter <= 0) {
 					stack.pop();
+					stack.pop();
+					if (!stack.empty() && stack.peek() != '0') {
+						i -= count - 1;
+						int l = Integer.parseInt("" + stack.pop()) - 1;
+						stack.push((char) l);
+					}
+				}
 				break;
 
 			default:
 				if (i != 0 && line.charAt(i - 1) == '(') {
 					loopCounter = Integer.parseInt("" + ch);
+					stack.push(ch);
 				} else {
 					if (loopCounter > 0 || stack.empty()) {
 						result += ch;
