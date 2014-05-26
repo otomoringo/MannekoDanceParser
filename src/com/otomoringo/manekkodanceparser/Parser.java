@@ -14,12 +14,6 @@ public class Parser {
 			if (line.equals("0"))
 				break;
 
-			Stack<Util> stack = new Stack<Util>();
-			Util namae = new Util('(', 3, 2);
-			stack.push(namae);
-			Util name = stack.peek();// 積んだてっぺんのクラスをとりあえずとりだす
-			char c = name.bracket;// stack.peek().bracketでもよい
-
 			String result = parser.parse(line);
 			System.out.println(result);
 		}
@@ -28,44 +22,51 @@ public class Parser {
 
 	public String parse(String line) {
 		String result = "";
-		Stack<Character> stack = new Stack<Character>();
-		int count = 0;
-		int loopCounter = 1;
+		Stack<Util> stack = new Stack<Util>();
+		Util util = new Util();
+		// stack.push(util);
+		// Util util = stack.peek();// 積んだてっぺんのクラスをとりあえずとりだす
+		// char c = util.bracket;// stack.peek().bracketでもよい
+
+		// Stack<Character> stack = new Stack<Character>();
+		// int count = 0;
+		// int loopCounter = 1;
 
 		for (int i = 0; i < line.length(); i++) {
 			char ch = line.charAt(i);
 			switch (ch) {
 			case '(':
-				stack.push(ch);
-				count = 0;
+				util.setBracket(ch);
+				util.setBackCounter(0);
+				stack.push(util);
 				break;
 
 			case ')':
-				if (loopCounter > 1) {
-					i -= count + 1;
-					loopCounter--;
-					count = 0;
+				if (stack.peek().getLoopCounter() > 1) {
+					i -= stack.peek().getBackCounter() + 1;
+					util.setLoopCounter(util.getLoopCounter() - 1);
+					util.setBackCounter(0);
 				}
 
-				if (loopCounter <= 0) {
+				if (stack.peek().getLoopCounter() <= 0) {
 					stack.pop();
-					stack.pop();
-					if (!stack.empty() && stack.peek() != '0') {
-						i -= count - 1;
-						int l = Integer.parseInt("" + stack.pop()) - 1;
-						stack.push((char) l);
+					if (!stack.empty() && stack.peek().getLoopCounter() != '0') {
+						i -= stack.peek().getBackCounter() - 1;
+						int l = Integer.parseInt(""
+								+ stack.peek().getLoopCounter()) - 1;
+						stack.push(util);
 					}
 				}
 				break;
 
 			default:
 				if (i != 0 && line.charAt(i - 1) == '(') {
-					loopCounter = Integer.parseInt("" + ch);
-					stack.push(ch);
+					util.setLoopCounter(Integer.parseInt("" + ch));
+					stack.push(util);
 				} else {
-					if (loopCounter > 0 || stack.empty()) {
+					if (util.getLoopCounter() > 0 || stack.empty()) {
 						result += ch;
-						count++;
+						util.setLoopCounter(util.getLoopCounter() + 1);
 					}
 				}
 				break;
