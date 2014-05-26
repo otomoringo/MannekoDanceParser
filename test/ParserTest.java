@@ -33,13 +33,13 @@ public class ParserTest {
 	public void parse_0xy_z() {
 		assertEquals("z", _parser.parse("(0xy)z"));
 	}
-	
+
 	@Test
 	public void parse_if_xy_z() {
 		_parser.setBranch(0);
 		assertEquals("xy", _parser.parseIf("[xy|z]"));
 	}
-	
+
 	@Test
 	public void parse_2_2x_y() {
 		_parser.setBranch(0);

@@ -24,13 +24,8 @@ public class Parser {
 		String result = "";
 		Stack<Util> stack = new Stack<Util>();
 		Util util = new Util();
-		// stack.push(util);
 		// Util util = stack.peek();// 積んだてっぺんのクラスをとりあえずとりだす
 		// char c = util.bracket;// stack.peek().bracketでもよい
-
-		// Stack<Character> stack = new Stack<Character>();
-		// int count = 0;
-		// int loopCounter = 1;
 
 		for (int i = 0; i < line.length(); i++) {
 			char ch = line.charAt(i);
@@ -38,36 +33,31 @@ public class Parser {
 			case '(':
 				util.setBracket(ch);
 				util.setBackCounter(0);
+				util.setLoopCounter(1);
 				stack.push(util);
 				break;
 
 			case ')':
-				if (stack.peek().getLoopCounter() > 1) {
-					i -= stack.peek().getBackCounter() + 1;
+				if (util.getLoopCounter() > 1) {
+					i -= util.getBackCounter() + 1;
 					util.setLoopCounter(util.getLoopCounter() - 1);
 					util.setBackCounter(0);
 				}
 
-				if (stack.peek().getLoopCounter() <= 0) {
-					stack.pop();
-					if (!stack.empty() && stack.peek().getLoopCounter() != '0') {
-						i -= stack.peek().getBackCounter() - 1;
-						int l = Integer.parseInt(""
-								+ stack.peek().getLoopCounter()) - 1;
-						stack.push(util);
+				if (util.getLoopCounter() <= 0) {
+					if (!stack.empty() && util.getLoopCounter() != 0) {
+						i -= util.getBackCounter() - 1;
 					}
+					stack.pop();
 				}
 				break;
 
 			default:
 				if (i != 0 && line.charAt(i - 1) == '(') {
 					util.setLoopCounter(Integer.parseInt("" + ch));
-					stack.push(util);
-				} else {
-					if (util.getLoopCounter() > 0 || stack.empty()) {
-						result += ch;
-						util.setLoopCounter(util.getLoopCounter() + 1);
-					}
+				} else if (util.getLoopCounter() > 0 || stack.empty()) {
+					result += ch;
+					util.setBackCounter(util.getBackCounter() + 1);
 				}
 				break;
 			}

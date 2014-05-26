@@ -11,7 +11,7 @@ public class Util {
 	// _backCounter = bc;
 	// }
 
-	public int getBracket() {
+	public char getBracket() {
 		return _bracket;
 	}
 
@@ -31,8 +31,8 @@ public class Util {
 		return _backCounter;
 	}
 
-	public void setBackCounter(int loopCounter) {
-		_loopCounter = loopCounter;
+	public void setBackCounter(int backCounter) {
+		_backCounter = backCounter;
 	}
 
 }
